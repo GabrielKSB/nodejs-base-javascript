@@ -3,7 +3,7 @@ const { User } = require("../models");
 class UserController {
   async store(req, res) {
     try {
-      const { name, email, password } = req.body;
+      const { name, email } = req.body;
 
       const userAlreadyExists = await User.findOne({ where: { email } });
 
@@ -15,7 +15,7 @@ class UserController {
         return res.status(400).json({ message: "Insira um nome e email." });
       }
 
-      const createdUser = await User.create({ name, email, password });
+      const createdUser = await User.create({ name, email });
 
       return res.status(200).json(createdUser);
     } catch (err) {
