@@ -4,9 +4,8 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const { password } = require("../config/database")
 const { SELECT } = require("sequelize/lib/query-types")
-//const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_SECRET =
-  "9e0a77e143feb7a51acdc810b1b839d4edd4847716d62a9269335723a8a5a6bd"
+const JWT_SECRET = process.env.JWT_SECRET;
+//const JWT_SECRET ="9e0a77e143feb7a51acdc810b1b839d4edd4847716d62a9269335723a8a5a6bd"
 
 class UserController {
   async store(req, res) {
