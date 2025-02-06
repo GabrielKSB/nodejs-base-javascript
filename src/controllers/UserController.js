@@ -1,5 +1,7 @@
 const { User } = require("../models")
 
+const auth = require("../shared/middlewares/auth")
+
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const { password } = require("../config/database")
@@ -46,6 +48,8 @@ class UserController {
       if (!token) {
         return res.status(401).json({ message: "Acesso Negado" })
       }
+
+      console.log("permitiu acesso aqui")
 
       try {
         const decoded = jwt.verify(token.replace("Bearer ", ""), JWT_SECRET)
@@ -132,8 +136,8 @@ class UserController {
           email: user.email,
         },
         JWT_SECRET,
-        { expiresIn: "2m" }
-      )
+        { expiresIn: "7d" }
+      ) 
 
       res.status(200).json(token)
     } catch (err) {
