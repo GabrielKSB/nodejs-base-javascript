@@ -12,7 +12,10 @@ const JWT_SECRET = process.env.JWT_SECRET;
 class UserController {
   async store(req, res) {
     try {
+      console.log("entrou no metodo pra registrar")
       const { name, email, password, number, area_code } = req.body
+
+      console.log("dados do body:", name, email, password, area_code, number)
 
       const userAlreadyExists = await User.findOne({ where: { email } })
 
@@ -43,16 +46,25 @@ class UserController {
 
   async listAll(req, res) {
     try {
-      const token = req.headers.authorization
+      console.log("entrou no metodo pra listar")
+      const tokenReq = req.headers.authorization
 
-      if (!token) {
+      if (!tokenReq) {
+        console.log("deu erro no if do token")
         return res.status(401).json({ message: "Acesso Negado" })
       }
 
       console.log("permitiu acesso aqui")
 
       try {
-        const decoded = jwt.verify(token.replace("Bearer ", ""), JWT_SECRET)
+        console.log("antes do decoded")
+        console.log(tokenReq)
+
+        const decoded = jwt.verify(tokenReq.replace("Bearer ", ""), JWT_SECRET)
+
+        console.log("depois do decoded")
+
+        console.log("id do usuário decoded:", decoded.id)
 
         req.userId = decoded.id
 
@@ -67,11 +79,14 @@ class UserController {
           ],
         })
 
+        console.log(users)
+
         return res.status(200).json(users)
       } catch (err) {
         return res
           .status(401)
-          .json({ message: "Token Inválido, Acesso não autorizado" })
+          .json({ message: "Token Inválido, Acesso não autorizado" }),
+          console.log("Token Inválido")
       }
     } catch (err) {
       return res.status(400).json({ message: "Falha ao cadastrar usuário" })
@@ -112,8 +127,8 @@ class UserController {
 
   async login(req, res) {
     try {
+      console.log("entrou pra logar")
       const userInfo = req.body
-
       //Buscar o úsuario no banco
       const user = await User.findOne({ where: { email: userInfo.email } })
 
@@ -140,6 +155,10 @@ class UserController {
       ) 
 
       res.status(200).json(token)
+
+      console.log("logou")
+      console.log(token)
+      
     } catch (err) {
       return res
         .status(500)
